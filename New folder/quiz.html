@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .quiz-container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        button {
+            background: #007BFF;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question h3 {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Online Quiz Test</h1>
+        <div id="quiz">
+            <!-- Questions will be injected here -->
+        </div>
+        <button id="submit">Submit</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            {
+                question: "What is the capital of France?",
+                options: ["Berlin", "Madrid", "Paris", "Lisbon"],
+                answer: "Paris"
+            },
+            {
+                question: "Which language is used for web development?",
+                options: ["Python", "JavaScript", "C#", "Java"],
+                answer: "JavaScript"
+            },
+            {
+                question: "What is 2 + 2?",
+                options: ["3", "4", "5", "6"],
+                answer: "4"
+            }
+        ];
+
+        const quizContainer = document.getElementById('quiz');
+        const submitButton = document.getElementById('submit');
+        const resultContainer = document.getElementById('result');
+
+        function loadQuiz() {
+            const quizContent = quizData.map((q, index) => `
+                <div class="question">
+                    <h3>${index + 1}. ${q.question}</h3>
+                    ${q.options.map(option => `
+                        <label>
+                            <input type="radio" name="question${index}" value="${option}">
+                            ${option}
+                        </label>
+                    `).join('')}
+                </div>
+            `).join('');
+            quizContainer.innerHTML = quizContent;
+        }
+
+        function calculateScore() {
+            let score = 0;
+            quizData.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="question${index}"]:checked`);
+                if (selected && selected.value === q.answer) {
+                    score++;
+                }
+            });
+            return score;
+        }
+
+        submitButton.addEventListener('click', () => {
+            const score = calculateScore();
+            resultContainer.textContent = `You scored ${score} out of ${quizData.length}!`;
+        });
+
+        // Load the quiz on page load
+        loadQuiz();
+    </script>
+</body>
+</html>
